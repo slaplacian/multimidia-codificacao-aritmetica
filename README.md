@@ -1,45 +1,80 @@
 # Codificador Aritmético
 
-Esse trabalho implementa um codificador e decodificador aritmético binário com suporte a *rescaling* para evitar underflow.
+Este projeto implementa um codificador e decodificador aritmético binário com suporte a *rescaling* para evitar underflow. A codificação aritmética é um método de compressão de dados que representa uma sequência de símbolos como um único número racional entre 0 e 1.
 
-# Uso
+## Uso
 
-## Codificar
+### Codificar uma Imagem
 
-```bash
-python3 encoder.py in.pgm out.bin
-```
-
-O arquivo `in.pgm` será lido, seus dados serão codificados com compressão aritmética binária e o resultado será salvo em `out.bin`, contendo os metadados e o bitstream comprimido.
-
-## Decodificar
+Para codificar uma imagem PGM, use o comando:
 
 ```bash
-python3 decoder.py out.bin new-in.pgm
+python encoder.py photos/lena_ascii.pgm bins/lena_ascii.bin
 ```
 
-O arquivo `out.bin` será decodificado e a imagem original será reconstruída e salva como `new-in.pgm`.
+O arquivo de entrada será lido, seus dados serão codificados com compressão aritmética binária e o resultado será salvo em um arquivo binário contendo os metadados e o bitstream comprimido.
 
+### Decodificar uma Imagem
 
-# Experimento
+Para decodificar o arquivo binário e recuperar a imagem original:
 
-Para executar os testes e obter os arquivos compactados e reconstruídos, basta rodar:
+```bash
+python decoder.py bins/lena_ascii.bin recs/lena_ascii-rec.pgm
+```
+
+## Exemplos
+
+O projeto inclui três imagens de exemplo para demonstração:
+
+1. **Lena** (1.2MB)
+   - Original: `photos/lena_ascii.pgm`
+   - Comprimido: `bins/lena_ascii.bin`
+   - Recuperado: `recs/lena_ascii-rec.pgm`
+
+2. **Baboon** (1.2MB)
+   - Original: `photos/baboon_ascii.pgm`
+   - Comprimido: `bins/baboon_ascii.bin`
+   - Recuperado: `recs/baboon_ascii-rec.pgm`
+
+3. **Quadrado** (260KB)
+   - Original: `photos/quadrado_ascii.pgm`
+   - Comprimido: `bins/quadrado_ascii.bin`
+   - Recuperado: `recs/quadrado_ascii-rec.pgm`
+
+## Executando os Testes
+
+Para executar todos os testes e gerar os arquivos compactados e reconstruídos automaticamente:
 
 ```bash
 ./job.sh
 ```
 
-## Resultados
+## Resultados da Compressão
 
-- **Imagens originais**: [photos/](photos/)
-- **Bitstreams codificados**: [bins/](bins/)
-- **Imagens recuperadas**: [recs/](recs/)
+| Imagem | Tamanho Original | Tamanho Compactado | Taxa de Compressão |
+|--------|------------------|-------------------|-------------------|
+| Lena | 1.2MB | 1.0MB | 0.878 |
+| Baboon | 1.2MB | 1.1MB | 0.880 |
+| Quadrado | 260KB | 236KB | 0.908 |
 
-### Tabela de Compressão
+## Estrutura do Projeto
 
+- `photos/`: Contém as imagens PGM originais
+- `bins/`: Armazena os arquivos binários comprimidos
+- `recs/`: Contém as imagens reconstruídas após decodificação
+- `encoder.py`: Implementação do codificador aritmético
+- `decoder.py`: Implementação do decodificador aritmético
+- `job.sh`: Script para executar todos os testes
 
-| Tamanho Original (bytes) | Tamanho Compactado (bytes) | Imagem Recuperada           | Taxa de Compressão |
-|--------------------------|-----------------------------|------------------------------|---------------------|
-| 1258676 (1.2M)| 1107545 (1.1M)| recs/baboon_ascii-rec.pgm | 0.880 |
-| 266112 (260K)| 241564 (236K)| recs/quadrado_ascii-rec.pgm | 0.908 |
-| 1228735 (1.2M)| 1078483 (1.0M)| recs/lena_ascii-rec.pgm | 0.878 |
+## Detalhes Técnicos
+
+O codificador utiliza uma implementação de 32 bits com suporte a rescaling para evitar underflow. O processo de codificação inclui:
+
+1. Cálculo das frequências dos símbolos
+2. Codificação aritmética com rescaling
+3. Geração do bitstream final
+
+O arquivo de saída contém:
+- Número total de bits
+- Contagem de zeros e uns
+- Bitstream comprimido
