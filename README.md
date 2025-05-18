@@ -2,11 +2,6 @@
 
 Este projeto implementa um codificador e decodificador aritmético binário com suporte a *rescaling* para evitar underflow. A codificação aritmética é um método de compressão de dados que representa uma sequência de símbolos como um único número racional entre 0 e 1.
 
-## Requisitos
-
-- Python 3.x
-- Biblioteca `bitstring`
-
 ## Uso
 
 ### Codificar uma Imagem
@@ -14,7 +9,7 @@ Este projeto implementa um codificador e decodificador aritmético binário com 
 Para codificar uma imagem PGM, use o comando:
 
 ```bash
-python3 encoder.py photos/lena_ascii.pgm bins/lena_ascii.bin
+python encoder.py photos/lena_ascii.pgm bins/lena_ascii.bin
 ```
 
 O arquivo de entrada será lido, seus dados serão codificados com compressão aritmética binária e o resultado será salvo em um arquivo binário contendo os metadados e o bitstream comprimido.
@@ -24,7 +19,7 @@ O arquivo de entrada será lido, seus dados serão codificados com compressão a
 Para decodificar o arquivo binário e recuperar a imagem original:
 
 ```bash
-python3 decoder.py bins/lena_ascii.bin recs/lena_ascii-rec.pgm
+python decoder.py bins/lena_ascii.bin recs/lena_ascii-rec.pgm
 ```
 
 ## Exemplos
