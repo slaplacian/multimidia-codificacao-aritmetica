@@ -53,19 +53,19 @@ O decodificador:
 ### Imagem: Baboon (baboon_ascii.pgm)
 - **Tamanho Original**: 1,258,676 bytes (1.2MB)
 - **Tamanho Comprimido**: 1,107,545 bytes (1.1MB)
-- **Taxa de Compressão**: 0.880 (88% do tamanho original)
+- **Taxa de Compressão**: 1.136
 - **Análise**: A imagem do babuíno apresenta uma taxa de compressão moderada devido à sua complexidade e detalhes. A presença de texturas e padrões complexos resulta em uma distribuição mais uniforme dos símbolos, limitando a eficiência da compressão aritmética.
 
 ### Imagem: Quadrado (quadrado_ascii.pgm)
 - **Tamanho Original**: 266,112 bytes (260KB)
 - **Tamanho Comprimido**: 241,564 bytes (236KB)
-- **Taxa de Compressão**: 0.908 (90.8% do tamanho original)
+- **Taxa de Compressão**: 1.102
 - **Análise**: A imagem do quadrado, por ser mais simples e conter grandes áreas uniformes, apresenta uma taxa de compressão ligeiramente melhor que a do babuíno. A presença de padrões repetitivos permite uma codificação mais eficiente.
 
 ### Imagem: Lena (lena_ascii.pgm)
 - **Tamanho Original**: 1,228,735 bytes (1.2MB)
 - **Tamanho Comprimido**: 1,078,483 bytes (1.0MB)
-- **Taxa de Compressão**: 0.878 (87.8% do tamanho original)
+- **Taxa de Compressão**: 1.139
 - **Análise**: A imagem Lena apresenta a melhor taxa de compressão entre as três imagens testadas. Isso se deve à sua combinação de áreas suaves e detalhes bem definidos, que resultam em uma distribuição de símbolos mais favorável para a codificação aritmética.
 
 ### Análise Comparativa
@@ -78,9 +78,9 @@ O decodificador:
 
 | Tamanho Original (bytes) | Tamanho Compactado (bytes) | Imagem Recuperada           | Taxa de Compressão |
 |--------------------------|-----------------------------|------------------------------|---------------------|
-| 1258676 (1.2M)| 1107545 (1.1M)| recs/baboon_ascii-rec.pgm | 0.880 |
-| 266112 (260K)| 241564 (236K)| recs/quadrado_ascii-rec.pgm | 0.908 |
-| 1228735 (1.2M)| 1078483 (1.0M)| recs/lena_ascii-rec.pgm | 0.878 |
+| 1258676 (1.2M)| 1107545 (1.1M)| recs/baboon_ascii-rec.pgm | 1.136 |
+| 266112 (260K)| 241564 (236K)| recs/quadrado_ascii-rec.pgm | 1.102 |
+| 1228735 (1.2M)| 1078483 (1.0M)| recs/lena_ascii-rec.pgm | 1.139 |
 
 ## Executando os Testes
 
