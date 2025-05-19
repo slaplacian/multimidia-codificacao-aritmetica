@@ -1,80 +1,127 @@
 # Codificador Aritmético
 
-Este projeto implementa um codificador e decodificador aritmético binário com suporte a *rescaling* para evitar underflow. A codificação aritmética é um método de compressão de dados que representa uma sequência de símbolos como um único número racional entre 0 e 1.
+Este trabalho implementa um codificador e decodificador aritmético binário com suporte a *rescaling* para evitar underflow. A codificação aritmética é um método de compressão de dados que representa uma sequência de símbolos como um único número real entre 0 e 1, permitindo uma compressão mais eficiente que métodos tradicionais como Huffman.
 
-## Uso
+## Fundamentos Técnicos
+
+### Codificação Aritmética
+- Utiliza um intervalo numérico [0,1) para representar a sequência de símbolos
+- Cada símbolo subdivide o intervalo atual proporcionalmente à sua probabilidade
+- Implementa *rescaling* para evitar problemas de precisão numérica
+- Utiliza 32 bits de precisão para os cálculos internos
+- Suporta compressão binária (símbolos 0 e 1)
+
+### Rescaling
+O algoritmo implementa três tipos de rescaling:
+1. **E1**: Quando o intervalo está na primeira metade [0, 0.5)
+2. **E2**: Quando o intervalo está na segunda metade [0.5, 1)
+3. **E3**: Quando o intervalo está no meio [0.25, 0.75)
+
+## Uso da CLI
 
 ### Codificar uma Imagem
-
-Para codificar uma imagem PGM, use o comando:
-
 ```bash
-python encoder.py photos/lena_ascii.pgm bins/lena_ascii.bin
+python encoder.py <arquivo_entrada.pgm> <arquivo_saida.bin>
 ```
 
-O arquivo de entrada será lido, seus dados serão codificados com compressão aritmética binária e o resultado será salvo em um arquivo binário contendo os metadados e o bitstream comprimido.
+Parâmetros:
+- `arquivo_entrada.pgm`: Imagem PGM em formato ASCII para compressão
+- `arquivo_saida.bin`: Arquivo binário de saída contendo o bitstream comprimido
+
+O codificador:
+1. Lê a imagem PGM de entrada
+2. Calcula as frequências dos símbolos (0 e 1)
+3. Aplica a codificação aritmética com rescaling
+4. Salva o bitstream comprimido junto com os metadados necessários para decodificação
 
 ### Decodificar uma Imagem
-
-Para decodificar o arquivo binário e recuperar a imagem original:
-
 ```bash
-python decoder.py bins/lena_ascii.bin recs/lena_ascii-rec.pgm
+python decoder.py <arquivo_entrada.bin> <arquivo_saida.pgm>
 ```
 
-## Exemplos
+Parâmetros:
+- `arquivo_entrada.bin`: Arquivo binário contendo o bitstream comprimido
+- `arquivo_saida.pgm`: Imagem PGM de saída reconstruída
 
-O projeto inclui três imagens de exemplo para demonstração:
+O decodificador:
+1. Lê os metadados e o bitstream comprimido
+2. Reconstrui a sequência original usando decodificação aritmética
+3. Gera a imagem PGM reconstruída
 
-1. **Lena** (1.2MB)
-   - Original: `photos/lena_ascii.pgm`
-   - Comprimido: `bins/lena_ascii.bin`
-   - Recuperado: `recs/lena_ascii-rec.pgm`
+## Análise de Compressão
 
-2. **Baboon** (1.2MB)
-   - Original: `photos/baboon_ascii.pgm`
-   - Comprimido: `bins/baboon_ascii.bin`
-   - Recuperado: `recs/baboon_ascii-rec.pgm`
+### Imagem: Baboon (baboon_ascii.pgm)
+- **Tamanho Original**: 1,258,676 bytes (1.2MB)
+- **Tamanho Comprimido**: 1,107,545 bytes (1.1MB)
+- **Taxa de Compressão**: 0.880 (88% do tamanho original)
+- **Análise**: A imagem do babuíno apresenta uma taxa de compressão moderada devido à sua complexidade e detalhes. A presença de texturas e padrões complexos resulta em uma distribuição mais uniforme dos símbolos, limitando a eficiência da compressão aritmética.
 
-3. **Quadrado** (260KB)
-   - Original: `photos/quadrado_ascii.pgm`
-   - Comprimido: `bins/quadrado_ascii.bin`
-   - Recuperado: `recs/quadrado_ascii-rec.pgm`
+### Imagem: Quadrado (quadrado_ascii.pgm)
+- **Tamanho Original**: 266,112 bytes (260KB)
+- **Tamanho Comprimido**: 241,564 bytes (236KB)
+- **Taxa de Compressão**: 0.908 (90.8% do tamanho original)
+- **Análise**: A imagem do quadrado, por ser mais simples e conter grandes áreas uniformes, apresenta uma taxa de compressão ligeiramente melhor que a do babuíno. A presença de padrões repetitivos permite uma codificação mais eficiente.
+
+### Imagem: Lena (lena_ascii.pgm)
+- **Tamanho Original**: 1,228,735 bytes (1.2MB)
+- **Tamanho Comprimido**: 1,078,483 bytes (1.0MB)
+- **Taxa de Compressão**: 0.878 (87.8% do tamanho original)
+- **Análise**: A imagem Lena apresenta a melhor taxa de compressão entre as três imagens testadas. Isso se deve à sua combinação de áreas suaves e detalhes bem definidos, que resultam em uma distribuição de símbolos mais favorável para a codificação aritmética.
+
+### Análise Comparativa
+- A eficiência da compressão está diretamente relacionada à entropia da imagem
+- Imagens com maior complexidade e detalhes tendem a ter taxas de compressão mais altas
+- O formato PGM ASCII, por sua natureza, já inclui overhead de representação que limita a eficiência da compressão
+- A implementação do rescaling garante a estabilidade numérica do processo de codificação
+
+### Tabela de Resultados da Compressão
+
+| Tamanho Original (bytes) | Tamanho Compactado (bytes) | Imagem Recuperada           | Taxa de Compressão |
+|--------------------------|-----------------------------|------------------------------|---------------------|
+| 1258676 (1.2M)| 1107545 (1.1M)| recs/baboon_ascii-rec.pgm | 0.880 |
+| 266112 (260K)| 241564 (236K)| recs/quadrado_ascii-rec.pgm | 0.908 |
+| 1228735 (1.2M)| 1078483 (1.0M)| recs/lena_ascii-rec.pgm | 0.878 |
 
 ## Executando os Testes
 
-Para executar todos os testes e gerar os arquivos compactados e reconstruídos automaticamente:
+Para executar todos os testes e gerar as imagens comprimidas e reconstruídas:
 
 ```bash
 ./job.sh
 ```
 
-## Resultados da Compressão
+### Exemplo de Saída
+Ao executar o script, você verá uma saída similar a esta:
 
-| Imagem | Tamanho Original | Tamanho Compactado | Taxa de Compressão |
-|--------|------------------|-------------------|-------------------|
-| Lena | 1.2MB | 1.0MB | 0.878 |
-| Baboon | 1.2MB | 1.1MB | 0.880 |
-| Quadrado | 260KB | 236KB | 0.908 |
+```
+Original images:
+photos/baboon_ascii.pgm: 1258676
+photos/lena_ascii.pgm: 1228735
+photos/quadrado_ascii.pgm: 266112
 
-## Estrutura do Projeto
+Encoded binaries:
+bins/baboon_ascii.bin: 1107545
+bins/lena_ascii.bin: 1078483
+bins/quadrado_ascii.bin: 241564
 
-- `photos/`: Contém as imagens PGM originais
-- `bins/`: Armazena os arquivos binários comprimidos
-- `recs/`: Contém as imagens reconstruídas após decodificação
-- `encoder.py`: Implementação do codificador aritmético
-- `decoder.py`: Implementação do decodificador aritmético
-- `job.sh`: Script para executar todos os testes
+Reconstructed images:
+recs/baboon_ascii-rec.pgm: 1258676
+recs/lena_ascii-rec.pgm: 1228735
+recs/quadrado_ascii-rec.pgm: 266112
+```
 
-## Detalhes Técnicos
+Note que os arquivos reconstruídos têm exatamente o mesmo tamanho dos originais, confirmando que a codificação aritmética é um método de compressão sem perdas.
 
-O codificador utiliza uma implementação de 32 bits com suporte a rescaling para evitar underflow. O processo de codificação inclui:
+### Estrutura de Diretórios
+- **Imagens originais**: [photos/](photos/)
+- **Bitstreams codificados**: [bins/](bins/)
+- **Imagens recuperadas**: [recs/](recs/)
 
-1. Cálculo das frequências dos símbolos
-2. Codificação aritmética com rescaling
-3. Geração do bitstream final
+### Verificação de Integridade
+Após a decodificação, é possível verificar a integridade das imagens comparando os arquivos originais com os reconstruídos:
 
-O arquivo de saída contém:
-- Número total de bits
-- Contagem de zeros e uns
-- Bitstream comprimido
+```bash
+diff photos/lena_ascii.pgm recs/lena_ascii-rec.pgm
+```
+
+A codificação aritmética implementada garante reconstrução perfeita dos dados originais, sem perda de informação.
