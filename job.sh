@@ -8,14 +8,28 @@ python3 decoder.py bins/baboon_ascii.bin   recs/baboon_ascii-rec.pgm
 python3 decoder.py bins/quadrado_ascii.bin recs/quadrado_ascii-rec.pgm
 python3 decoder.py bins/lena_ascii.bin     recs/lena_ascii-rec.pgm
 
-du -b photos/baboon_ascii.pgm
-du -b photos/quadrado_ascii.pgm
-du -b photos/lena_ascii.pgm
+get_size() {
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    stat -f%z "$1"
+  else
+    du -b "$1" | cut -f1
+  fi
+}
 
-du -b bins/baboon_ascii.bin
-du -b bins/quadrado_ascii.bin
-du -b bins/lena_ascii.bin
+echo "Original images:"
+for f in photos/*.pgm; do
+  echo -n "$f: "
+  get_size "$f"
+done
 
-du -b recs/baboon_ascii-rec.pgm
-du -b recs/quadrado_ascii-rec.pgm
-du -b recs/lena_ascii-rec.pgm
+echo -e "\nEncoded binaries:"
+for f in bins/*.bin; do
+  echo -n "$f: "
+  get_size "$f"
+done
+
+echo -e "\nReconstructed images:"
+for f in recs/*.pgm; do
+  echo -n "$f: "
+  get_size "$f"
+done
