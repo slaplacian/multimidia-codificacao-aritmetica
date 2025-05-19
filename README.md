@@ -21,7 +21,7 @@ O algoritmo implementa três tipos de rescaling:
 
 ### Codificar uma Imagem
 ```bash
-python3 encoder.py <arquivo_entrada.pgm> <arquivo_saida.bin>
+python encoder.py <arquivo_entrada.pgm> <arquivo_saida.bin>
 ```
 
 Parâmetros:
@@ -36,7 +36,7 @@ O codificador:
 
 ### Decodificar uma Imagem
 ```bash
-python3 decoder.py <arquivo_entrada.bin> <arquivo_saida.pgm>
+python decoder.py <arquivo_entrada.bin> <arquivo_saida.pgm>
 ```
 
 Parâmetros:
