@@ -6,12 +6,12 @@ from bitstring import ConstBitStream, BitArray
 from get_bytes import convert_to_bytes_file
 import os
 
-
 TOTAL_BITS = 32
-MAX_RANGE = (1 << TOTAL_BITS)
+MAX_RANGE = 1 << TOTAL_BITS
 HALF = MAX_RANGE >> 1
 QUARTER = HALF >> 1
 THREE_QUARTERS = QUARTER * 3
+
 
 def get_bit_list(filename):
     p5_filename = "tmpfile"
@@ -20,12 +20,14 @@ def get_bit_list(filename):
     os.remove(p5_filename)
     return [int(b) for b in stream]
 
+
 def calculate_frequencies(bits):
     count = [0, 0]
     for bit in bits:
         count[bit] += 1
     total = sum(count)
     return count, [c / total for c in count]
+
 
 def arithmetic_encode_with_scaling(bits, freq):
     low = 0
@@ -71,15 +73,16 @@ def arithmetic_encode_with_scaling(bits, freq):
 
     return output_bits
 
+
 def write_binary_file(output_filename, total_bits, count0, count1, output_bits):
-    with open(output_filename, 'wb') as f:
-        
-        f.write(struct.pack('>I', total_bits))
-        f.write(struct.pack('>I', count0))
-        f.write(struct.pack('>I', count1))
+    with open(output_filename, "wb") as f:
+        f.write(struct.pack(">I", total_bits))
+        f.write(struct.pack(">I", count0))
+        f.write(struct.pack(">I", count1))
 
         bit_array = BitArray(output_bits)
         bit_array.tofile(f)
+
 
 def main():
     input_file = sys.argv[1]
@@ -91,5 +94,6 @@ def main():
 
     write_binary_file(output_file, len(output_bits), count[0], count[1], output_bits)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

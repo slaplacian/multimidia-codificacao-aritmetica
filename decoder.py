@@ -4,37 +4,36 @@ import sys
 import struct
 from bitstring import BitStream, BitArray
 from get_string import convert_to_string_file
-import hashlib
-import datetime
 import os
 
+
 TOTAL_BITS = 32
-MAX_RANGE = (1 << TOTAL_BITS)
+MAX_RANGE = 1 << TOTAL_BITS
 HALF = MAX_RANGE >> 1
 QUARTER = HALF >> 1
 THREE_QUARTERS = QUARTER * 3
 
+
 def read_compressed_file(filename):
-    with open(filename, 'rb') as f:
-        total_bits = struct.unpack('>I', f.read(4))[0]
-        count0 = struct.unpack('>I', f.read(4))[0]
-        count1 = struct.unpack('>I', f.read(4))[0]
+    with open(filename, "rb") as f:
+        total_bits = struct.unpack(">I", f.read(4))[0]
+        count0 = struct.unpack(">I", f.read(4))[0]
+        count1 = struct.unpack(">I", f.read(4))[0]
         data = f.read()
         bitstream = BitStream(bytes=data)
     return total_bits, count0, count1, bitstream
 
-def arithmetic_decode_with_scaling(bitstream, count0, count1, total_symbols):
 
+def arithmetic_decode_with_scaling(bitstream, count0, count1, total_symbols):
     total = count0 + count1
     prob0 = count0 / total
-    prob1 = count1 / total
 
     low = 0
     high = MAX_RANGE
     value = 0
 
     for _ in range(TOTAL_BITS):
-        value = (value << 1) | bitstream.read('uint:1')
+        value = (value << 1) | bitstream.read("uint:1")
 
     decoded_bits = []
 
@@ -67,15 +66,19 @@ def arithmetic_decode_with_scaling(bitstream, count0, count1, total_symbols):
 
             low <<= 1
             high <<= 1
-            value = (value << 1) | (bitstream.read('uint:1') if bitstream.pos < bitstream.len else 0)
+            value = (value << 1) | (
+                bitstream.read("uint:1") if bitstream.pos < bitstream.len else 0
+            )
             high = min(high, MAX_RANGE)
 
     return decoded_bits
 
+
 def write_binary_file(bits, output_filename):
     bit_array = BitArray(bits)
-    with open(output_filename, 'wb') as f:
+    with open(output_filename, "wb") as f:
         bit_array.tofile(f)
+
 
 def main():
     input_file = sys.argv[1]
@@ -89,5 +92,6 @@ def main():
     convert_to_string_file(p5_output_file,output_file)
     os.remove(p5_output_file)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
