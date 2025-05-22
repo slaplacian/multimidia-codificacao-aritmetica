@@ -3,6 +3,9 @@
 import sys
 import struct
 from bitstring import ConstBitStream, BitArray
+from get_bytes import convert_to_bytes_file
+import os
+
 
 TOTAL_BITS = 32
 MAX_RANGE = (1 << TOTAL_BITS)
@@ -11,7 +14,10 @@ QUARTER = HALF >> 1
 THREE_QUARTERS = QUARTER * 3
 
 def get_bit_list(filename):
-    stream = ConstBitStream(filename=filename)
+    p5_filename = "tmpfile"
+    convert_to_bytes_file(filename,p5_filename)
+    stream = ConstBitStream(filename=p5_filename)
+    os.remove(p5_filename)
     return [int(b) for b in stream]
 
 def calculate_frequencies(bits):

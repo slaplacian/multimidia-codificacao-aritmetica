@@ -3,6 +3,10 @@
 import sys
 import struct
 from bitstring import BitStream, BitArray
+from get_string import convert_to_string_file
+import hashlib
+import datetime
+import os
 
 TOTAL_BITS = 32
 MAX_RANGE = (1 << TOTAL_BITS)
@@ -80,7 +84,10 @@ def main():
     _, count0, count1, bitstream = read_compressed_file(input_file)
     total_symbols = count0 + count1
     bits = arithmetic_decode_with_scaling(bitstream, count0, count1, total_symbols)
-    write_binary_file(bits, output_file)
+    p5_output_file = "tmpfile"
+    write_binary_file(bits, p5_output_file)
+    convert_to_string_file(p5_output_file,output_file)
+    os.remove(p5_output_file)
 
 if __name__ == '__main__':
     main()
