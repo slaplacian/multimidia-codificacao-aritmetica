@@ -14,10 +14,10 @@ THREE_QUARTERS = QUARTER * 3
 
 
 def get_bit_list(filename):
-    p5_filename = "tmpfile"
-    convert_to_bytes_file(filename,p5_filename)
-    stream = ConstBitStream(filename=p5_filename)
-    os.remove(p5_filename)
+    tmp_filename = "tmpfile"
+    convert_to_bytes_file(filename,tmp_filename)
+    stream = ConstBitStream(filename=tmp_filename)
+    os.remove(tmp_filename)
     return [int(b) for b in stream]
 
 
