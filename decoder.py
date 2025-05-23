@@ -87,10 +87,10 @@ def main():
     _, count0, count1, bitstream = read_compressed_file(input_file)
     total_symbols = count0 + count1
     bits = arithmetic_decode_with_scaling(bitstream, count0, count1, total_symbols)
-    p5_output_file = "tmpfile"
-    write_binary_file(bits, p5_output_file)
-    convert_to_string_file(p5_output_file,output_file)
-    os.remove(p5_output_file)
+    tmp_output_file = "tmpfile"
+    write_binary_file(bits, tmp_output_file)
+    convert_to_string_file(tmp_output_file,output_file)
+    os.remove(tmp_output_file)
 
 
 if __name__ == "__main__":
