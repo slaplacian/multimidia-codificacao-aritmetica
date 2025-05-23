@@ -1,3 +1,10 @@
+# Componentes do Grupo
+
+Léo Victor Cruz Vasconcelos
+Luiz Guilherme Amadi Braga
+Diogo Laurindo Souza de Araújo
+Alexandre de Paiva Almeida
+
 # Codificador Aritmético
 
 Este trabalho implementa um codificador e decodificador aritmético binário com suporte a *rescaling* para evitar underflow. A codificação aritmética é um método de compressão de dados que representa uma sequência de símbolos como um único número real entre 0 e 1, permitindo uma compressão mais eficiente que métodos tradicionais como Huffman.
