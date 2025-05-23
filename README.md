@@ -19,7 +19,7 @@ O algoritmo implementa três tipos de rescaling:
 
 ### Otizmização
 
-Nesse trabalho, visando uma compressão melhor, foi analizado o padrão comum dos arquivos .PGM P2, que possuem vários valores de 0 até 255 em ASCII. esses valores foram transformados em bytes, então, espaços não são mais necessários, e cada pixel é representado por 1 byte. Antes de começar a compressão, os dados da imagem são tranformados nesse formato e só depois são comprimidos com o codificador aritmético binário.
+Para melhorar a taxa de compressão, este trabalho analisou a estrutura dos arquivos .PGM no formato P2 (ASCII). Nesse formato, cada pixel é representado como um número decimal (de 0 a 255) em texto, separado por espaços — o que gera um grande overhead, já que números como 128 ocupam três caracteres ASCII e ainda há espaços extras entre os valores. A solução adotada foi converter previamente os dados para o formato binário, onde cada pixel é armazenado diretamente como 1 byte. Isso elimina completamente os espaços e a representação em texto, reduzindo significativamente o tamanho antes mesmo de aplicar qualquer compressão. Essa transformação é feita automaticamente antes da codificação aritmética. O codificador então trabalha diretamente com os bytes da imagem, garantindo que apenas os dados relevantes sejam considerados, aumentando a eficiência da compressão binária.
 
 ## Uso da CLI
 
