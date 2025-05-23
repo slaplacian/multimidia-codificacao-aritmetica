@@ -1,8 +1,11 @@
 # Componentes do Grupo
 
 Léo Victor Cruz Vasconcelos
+
 Luiz Guilherme Amadi Braga
+
 Diogo Laurindo Souza de Araújo
+
 Alexandre de Paiva Almeida
 
 # Codificador Aritmético
